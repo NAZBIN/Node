@@ -10,3 +10,31 @@ Common Js规范。
     不是同一块地址，exports会失效。
 `在A文件中对B文件的修改，当C文件引用B时可以引用被修改后的内容，so 模块可以当做一个全局的存储对象来用。
 `通过把一些逻辑代码封装到一个模块里，以后需要再次用这段逻辑的时候，直接引入模块就可以。
+
+
+Npm:包管理工具，别人写的Node.js模块
+`npm当上传到代码仓库,可以忽略node_module只上传package.json，这样当pull一个项目的时候可以直接通过
+    npm install 下载当前项目所需要的包。(package.json中的dependencies用来声明依赖)
+
+内置模块:提供操作系统与Node.js的交互能力
+`Node.js源码。node.js内置模块都在lib里面  
+`内置模块的整个调用通路:node.js应用代码->Node.js内置模块->调用node.js里的c++模块->得到结果返回给node.js模块->应用
+`Application->V8->node.js BINDINGS（API） <-
+`process其实是EventEmitter的一个实例。观察者模式(addEventListener,removeEventListener)
+`EventEmitter实例可以抛任意的事件出来并且带着它想要的参数
+`观察者模式: 调用vs抛事件
+             抛事件:没有人接受事件，他还能继续下去。比如很多app同群发通知消息
+             调用:可靠性更高
+`Node.js模块做的事情基本上就是:负责node.js的应用层面到操作系统层面的通信。
+
+
+非阻塞I/O
+`非阻塞I/O是处理node.js并发的一个方法
+`从node.js的架构来看，可以分成Node.js线程和其它c++线程。node.js把大量的计算能力分到其它c++线程来计算，计算结果会回调给node.js线程
+`libuv就是用线程池来实现的
+`扩:glob可以把目录下所有的文件和文件名递归的获取到
+
+
+异步编程
+`node.js中的回调函数有格式规范:第一个参数是err,后面的参数才是回调函数执行的结果。
+`↑ ↑ ↑  Why? cause node.js中没一个事件循环都是一个全新的调用栈, 在函数内部 throw的错误 在外面 try catcha是获取不到的。所以也得通过callback来实现
